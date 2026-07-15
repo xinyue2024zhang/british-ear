@@ -1,6 +1,21 @@
 const $ = s => document.querySelector(s);
 const storeKey = "british-ear-progress-v1";
-const state = {level:"all",session:[],index:0,checked:false,attempted:false,revealed:false,repeatsLeft:0,repeatIndex:0,repeatTimer:null,stats:JSON.parse(localStorage.getItem(storeKey)||'{"attempts":0,"correct":0,"mistakes":[],"completed":0,"streak":0,"lastDay":""}')};
+const defaultStats = () => ({attempts:0,correct:0,mistakes:[],completed:0,streak:0,lastDay:""});
+function loadStats(){
+ try{
+  const saved=JSON.parse(localStorage.getItem(storeKey)||"null");
+  if(!saved||typeof saved!=="object"||Array.isArray(saved))return defaultStats();
+  return {
+   attempts:Number.isFinite(saved.attempts)&&saved.attempts>=0?saved.attempts:0,
+   correct:Number.isFinite(saved.correct)&&saved.correct>=0?saved.correct:0,
+   mistakes:Array.isArray(saved.mistakes)?saved.mistakes.filter(id=>typeof id==="string"):[],
+   completed:Number.isFinite(saved.completed)&&saved.completed>=0?saved.completed:0,
+   streak:Number.isFinite(saved.streak)&&saved.streak>=0?saved.streak:0,
+   lastDay:typeof saved.lastDay==="string"?saved.lastDay:""
+  };
+ }catch{return defaultStats()}
+}
+const state = {level:"all",session:[],index:0,checked:false,attempted:false,revealed:false,repeatsLeft:0,repeatIndex:0,repeatTimer:null,stats:loadStats()};
 const audio = $("#audioPlayer");
 
 function classifyTopic(text){
@@ -12,7 +27,8 @@ function classifyTopic(text){
   "日常生活":["clothes","money","game","news","note","carpet","screen","ring","wash","wear","morning","evening"],
   "物品与动作":["stick","chart","lock","coin","force","move","write","paste","soap","hoist","weave","struck"]
  };
- for(const [topic,words] of Object.entries(groups))if(words.some(word=>s.includes(word)))return topic;
+ const tokens=new Set(s.match(/[a-z']+/g)||[]);
+ for(const [topic,words] of Object.entries(groups))if(words.some(word=>tokens.has(word.trim())))return topic;
  return "日常生活";
 }
 function classifyLength(text){const n=normalise(text).split(" ").filter(Boolean).length;return n<=6?"短句":n<=9?"中句":"长句"}
@@ -42,11 +58,25 @@ function renderQuestion(){
 function play(){
  clearTimeout(state.repeatTimer);const total=Number($("#repeatSelect").value);state.repeatsLeft=total;state.repeatIndex=1;playCurrent(total);
 }
-function playCurrent(total){audio.playbackRate=Number($("#speedSelect").value);audio.currentTime=0;audio.play().catch(()=>{});$("#playIcon").textContent="❚❚";$("#audioTitle").textContent=total>1?`正在播放 ${state.repeatIndex}/${total}`:"正在播放"}
+function playCurrent(total){
+ audio.playbackRate=Number($("#speedSelect").value);audio.currentTime=0;
+ $("#playIcon").textContent="❚❚";$("#audioTitle").textContent=total>1?`正在播放 ${state.repeatIndex}/${total}`:"正在播放";
+ const started=audio.play();
+ if(started)started.catch(()=>{clearTimeout(state.repeatTimer);state.repeatsLeft=0;$("#playIcon").textContent="▶";$("#audioTitle").textContent="点击播放音频"});
+}
 audio.addEventListener("ended",()=>{const total=Number($("#repeatSelect").value);state.repeatsLeft--;if(state.repeatsLeft>0){state.repeatIndex++;$("#audioTitle").textContent=`稍后重播 ${state.repeatIndex}/${total}`;state.repeatTimer=setTimeout(()=>playCurrent(total),650)}else{$("#playIcon").textContent="▶";$("#audioTitle").textContent="再听一遍"}});
+function escapeHtml(text){return text.replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[char])}
 function diff(answer,target){
- const a=normalise(answer).split(" ").filter(Boolean),t=normalise(target).split(" ").filter(Boolean);let html=[];
- for(let i=0;i<Math.max(a.length,t.length);i++){if(a[i]===t[i])html.push(`<span class="word-good">${t[i]}</span>`);else if(!a[i])html.push(`<span class="word-missing">${t[i]}</span>`);else if(!t[i])html.push(`<span class="word-bad">${a[i]}</span>`);else html.push(`<span class="word-bad">${a[i]}</span> <span class="word-missing">${t[i]}</span>`)}return html.join(" ");
+ const a=normalise(answer).split(" ").filter(Boolean),t=normalise(target).split(" ").filter(Boolean);
+ const table=Array.from({length:a.length+1},()=>Array(t.length+1).fill(0));
+ for(let i=a.length-1;i>=0;i--)for(let j=t.length-1;j>=0;j--)table[i][j]=a[i]===t[j]?table[i+1][j+1]+1:Math.max(table[i+1][j],table[i][j+1]);
+ const html=[];let i=0,j=0;
+ while(i<a.length||j<t.length){
+  if(i<a.length&&j<t.length&&a[i]===t[j]){html.push(`<span class="word-good">${escapeHtml(t[j])}</span>`);i++;j++}
+  else if(j<t.length&&(i===a.length||table[i][j+1]>=table[i+1][j])){html.push(`<span class="word-missing">${escapeHtml(t[j])}</span>`);j++}
+  else{html.push(`<span class="word-bad">${escapeHtml(a[i])}</span>`);i++}
+ }
+ return html.join(" ");
 }
 function check(reveal=false){
  if(state.checked)return;const q=current(),answer=$("#answerInput").value.trim();if(!answer&&!reveal){$("#answerInput").focus();return}
@@ -85,7 +115,7 @@ $("#lengthSelect").onchange=makeSession;
 $("#sessionSize").onchange=makeSession;
 $("#mistakesOnly").onchange=makeSession;
 $("#themeButton").onclick=()=>document.body.classList.toggle("dark");
-$("#resetButton").onclick=()=>{if(confirm("确定清空所有练习记录吗？")){localStorage.removeItem(storeKey);state.stats={attempts:0,correct:0,mistakes:[],completed:0,streak:0,lastDay:""};save();makeSession()}};
+$("#resetButton").onclick=()=>{if(confirm("确定清空所有练习记录吗？")){localStorage.removeItem(storeKey);state.stats=defaultStats();save();makeSession()}};
 document.addEventListener("keydown",e=>{
  if(e.key==="F2"||(e.key==="/"&&(e.metaKey||e.ctrlKey))){e.preventDefault();toggleAnswer();return}
  if(e.code==="Space"&&document.activeElement!==$("#answerInput")){e.preventDefault();play()}

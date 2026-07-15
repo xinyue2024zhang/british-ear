@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>British Ear · 英式英语听写</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231b8a49'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-family='Arial' font-size='28' font-weight='700' fill='white'%3EBE%3C/text%3E%3C/svg%3E">
   <link rel="stylesheet" href="styles.css?v=9">
   <link rel="stylesheet" href="brand.css?v=9">
 </head>
@@ -113,7 +114,7 @@
             <button class="play-button" id="playButton" aria-label="播放音频"><span id="playIcon">▶</span></button>
             <div>
               <strong id="audioTitle">播放这句话</strong>
-              <span id="audioHint">按 Space 也可以播放</span>
+              <span id="audioHint">输入框外按 Space 也可以播放</span>
             </div>
             <button class="small-button" id="replayButton">↻ 重播</button>
           </div>
@@ -125,7 +126,7 @@
           <div id="feedback" class="feedback hidden" aria-live="polite"></div>
 
           <div class="practice-actions">
-            <span class="shortcut">Enter 提交 · Space 播放 · F2 答案</span>
+            <span class="shortcut">Enter 提交 · 输入框外 Space 播放 · F2 答案</span>
             <div>
               <button class="ghost-button" id="revealButton">显示答案</button>
               <button class="primary-button" id="submitButton">检查答案</button>
@@ -147,6 +148,6 @@
     </main>
   </div>
   <script src="sentences.js?v=7"></script>
-  <script src="app.js?v=13"></script>
+  <script src="app.js?v=14"></script>
 </body>
 </html>
