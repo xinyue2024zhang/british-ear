@@ -1,0 +1,22 @@
+/* British Ear brand palette */
+.brand-mark,.streak-card{background:linear-gradient(145deg,#361a54,#12239e)}
+.streak-card span,.streak-card small{color:#dceaff}
+.status-dot{color:#10433f;background:rgba(26,171,64,.12)}
+.segmented{background:#f0ebf5}
+.segmented button.active{background:#12239e;color:#fff;box-shadow:0 4px 12px rgba(18,35,158,.22)}
+.primary-button{background:linear-gradient(135deg,#12239e,#118dff)}
+.primary-button:hover{filter:brightness(1.08)}
+.mini-stats strong{color:#10433f}
+.progress-track{background:#eee6f1}
+.progress-track span{background:linear-gradient(90deg,#e66c37,#e645ab)}
+.audio-zone{background:linear-gradient(135deg,rgba(17,141,255,.10),rgba(230,69,171,.08));border:1px solid rgba(17,141,255,.14)}
+.play-button{background:linear-gradient(145deg,#12239e,#118dff);box-shadow:0 8px 22px rgba(18,35,158,.28)}
+textarea:focus{border-color:#118dff;box-shadow:0 0 0 3px rgba(17,141,255,.13)}
+.feedback{background:rgba(26,171,64,.10);border-left-color:#1aab40}
+.feedback.bad{background:rgba(230,69,171,.09);border-color:#e645ab}
+.word-good{color:#1aab40}.word-bad{color:#e645ab}.word-missing{color:#751441;background:rgba(230,69,171,.14)}
+.steps article{border-top:3px solid #e66c37}.steps article:nth-child(2){border-color:#e645ab}.steps article:nth-child(3){border-color:#1aab40}
+.steps article:nth-child(2) b{color:#e645ab}.steps article:nth-child(3) b{color:#1aab40}
+.dark{--ink:#f8f3ff;--muted:#ef9bd0;--paper:#100b1b;--card:#1d1230;--line:#4a2b61;--soft:#181f53;--shadow:none}
+.dark .segmented{background:#28183b}.dark .segmented button.active{background:#118dff;color:#fff}
+.dark .feedback{background:rgba(26,171,64,.13)}.dark .feedback.bad{background:rgba(230,69,171,.13)}.dark .mini-stats strong{color:#7ee79a}

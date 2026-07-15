@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>British Ear · 英式英语听写</title>
+  <link rel="stylesheet" href="styles.css?v=9">
+  <link rel="stylesheet" href="brand.css?v=9">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="返回首页">
+        <span class="brand-mark">BE</span>
+        <span><strong>British Ear</strong><small>英式英语听写</small></span>
+      </a>
+      <div class="header-actions">
+        <button class="icon-button" id="themeButton" aria-label="切换深色模式">☾</button>
+        <button class="ghost-button" id="resetButton">重置进度</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div>
+          <span class="eyebrow">SOUTHERN BRITISH · RP</span>
+          <h1>听清每一个英式音节</h1>
+          <p>短句精听、即时纠错、本地保存。戴上耳机，从今天的 10 句开始。</p>
+        </div>
+        <div class="streak-card">
+          <span>连续练习</span>
+          <strong><b id="streakCount">0</b> 天</strong>
+          <small>完成一组即可点亮今天</small>
+        </div>
+      </section>
+
+      <section class="dashboard">
+        <aside class="sidebar card">
+          <div class="section-heading">
+            <div><span class="kicker">训练设置</span><h2>今日练习</h2></div>
+            <span class="status-dot">本地模式</span>
+          </div>
+
+          <label>难度</label>
+          <div class="segmented" id="levelFilter">
+            <button data-value="all" class="active">全部</button>
+            <button data-value="A1">A1</button>
+            <button data-value="A2">A2</button>
+            <button data-value="B1">B1</button>
+          </div>
+
+          <label for="sessionSize">每组句数</label>
+          <select id="sessionSize">
+            <option value="10">10 句</option>
+            <option value="20">20 句</option>
+            <option value="30">30 句</option>
+            <option value="1000">全部可用句子</option>
+          </select>
+
+          <label for="topicSelect">句子主题</label>
+          <select id="topicSelect">
+            <option value="all">全部主题</option>
+            <option value="日常生活">日常生活</option>
+            <option value="人与关系">人与关系</option>
+            <option value="自然与天气">自然与天气</option>
+            <option value="食物与饮品">食物与饮品</option>
+            <option value="物品与动作">物品与动作</option>
+          </select>
+
+          <label for="lengthSelect">句子长度</label>
+          <select id="lengthSelect">
+            <option value="all">全部长度</option>
+            <option value="短句">短句（不超过 6 词）</option>
+            <option value="中句">中句（7–9 词）</option>
+            <option value="长句">长句（10 词以上）</option>
+          </select>
+
+          <label for="speedSelect">播放速度</label>
+          <select id="speedSelect">
+            <option value="0.75">0.75× 慢速</option>
+            <option value="1" selected>1.00× 正常</option>
+            <option value="1.25">1.25× 快速</option>
+          </select>
+
+          <label for="repeatSelect">每次自动播放</label>
+          <select id="repeatSelect">
+            <option value="1">1 次</option>
+            <option value="2" selected>2 次</option>
+            <option value="3">3 次</option>
+            <option value="5">5 次</option>
+          </select>
+
+          <label class="check-row"><input id="mistakesOnly" type="checkbox"><span>只练错题</span></label>
+          <button class="primary-button" id="newSessionButton">开始新一组</button>
+
+          <div class="mini-stats">
+            <div><strong id="completedTotal">0</strong><span>累计完成</span></div>
+            <div><strong id="accuracyTotal">—</strong><span>总体正确率</span></div>
+            <div><strong id="mistakeTotal">0</strong><span>错题</span></div>
+          </div>
+        </aside>
+
+        <section class="practice card">
+          <div class="progress-row">
+            <div>
+              <span class="kicker" id="questionMeta">A1 · SOUTHERN BRITISH</span>
+              <h2>第 <span id="currentNumber">1</span> 句 <small>/ <span id="sessionTotal">10</span></small></h2>
+            </div>
+            <div class="progress-track"><span id="progressBar"></span></div>
+          </div>
+
+          <div class="audio-zone">
+            <button class="play-button" id="playButton" aria-label="播放音频"><span id="playIcon">▶</span></button>
+            <div>
+              <strong id="audioTitle">播放这句话</strong>
+              <span id="audioHint">按 Space 也可以播放</span>
+            </div>
+            <button class="small-button" id="replayButton">↻ 重播</button>
+          </div>
+          <audio id="audioPlayer" preload="auto"></audio>
+
+          <label class="answer-label" for="answerInput">输入你听到的内容</label>
+          <textarea id="answerInput" rows="3" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Type what you hear…"></textarea>
+
+          <div id="feedback" class="feedback hidden" aria-live="polite"></div>
+
+          <div class="practice-actions">
+            <span class="shortcut">Enter 提交 · Space 播放 · F2 答案</span>
+            <div>
+              <button class="ghost-button" id="revealButton">显示答案</button>
+              <button class="primary-button" id="submitButton">检查答案</button>
+              <button class="primary-button hidden" id="nextButton">下一句 →</button>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section class="how-it-works">
+        <span class="kicker">HOW IT WORKS</span>
+        <h2>一次只专注一句</h2>
+        <div class="steps">
+          <article><b>01</b><h3>先听</h3><p>完整听一遍，先抓句子节奏和关键词。</p></article>
+          <article><b>02</b><h3>写下</h3><p>输入听到的内容，不必担心大小写和标点。</p></article>
+          <article><b>03</b><h3>订正</h3><p>系统逐词标出遗漏和错误，并自动加入错题。</p></article>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script src="sentences.js?v=7"></script>
+  <script src="app.js?v=13"></script>
+</body>
+</html>
