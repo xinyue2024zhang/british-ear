@@ -16,6 +16,7 @@ https://aha-moment-art.github.io/british-ear/
 - 支持按素材来源筛选，可单独练习某个视频
 - 素材来源改为直接可见的课程卡片，不需要展开下拉框
 - 支持“听写”和“纯听”两种模式；纯听模式不要求输入，也不计入正确率
+- 手机端操作按钮采用自适应两列布局，避免提交按钮溢出屏幕
 - 25 条 `Keir Starmer · Farewell Answer` 视频逐句原声
 - 603 条 `Keir Starmer · Final PMQs` 视频逐句原声
 - 共 676 条听写素材，视频素材均由本地原视频转写并切分为独立 MP3
