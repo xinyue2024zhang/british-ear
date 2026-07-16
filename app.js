@@ -40,7 +40,8 @@ function save(){localStorage.setItem(storeKey,JSON.stringify(state.stats));rende
 function current(){return state.session[state.index]}
 function makeSession(){
   let pool=window.SENTENCES.filter(x=>state.level==="all"||x.level===state.level);
-  const topic=$("#topicSelect").value,length=$("#lengthSelect").value;
+  const source=$("#sourceSelect").value,topic=$("#topicSelect").value,length=$("#lengthSelect").value;
+  if(source!=="all")pool=pool.filter(x=>x.source===source);
   if(topic!=="all")pool=pool.filter(x=>x.topic===topic);
   if(length!=="all")pool=pool.filter(x=>x.length===length);
   if($("#mistakesOnly").checked) pool=pool.filter(x=>state.stats.mistakes.includes(x.id));
@@ -110,6 +111,7 @@ function renderStats(){const s=state.stats;$("#completedTotal").textContent=s.co
 $("#playButton").onclick=play;$("#replayButton").onclick=play;$("#submitButton").onclick=()=>check(false);$("#revealButton").onclick=toggleAnswer;$("#nextButton").onclick=next;$("#newSessionButton").onclick=makeSession;
 $("#speedSelect").onchange=()=>audio.playbackRate=Number($("#speedSelect").value);
 $("#levelFilter").onclick=e=>{if(!e.target.dataset.value)return;document.querySelectorAll("#levelFilter button").forEach(b=>b.classList.remove("active"));e.target.classList.add("active");state.level=e.target.dataset.value;makeSession()};
+$("#sourceSelect").onchange=makeSession;
 $("#topicSelect").onchange=makeSession;
 $("#lengthSelect").onchange=makeSession;
 $("#sessionSize").onchange=makeSession;
