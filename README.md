@@ -13,6 +13,10 @@ https://aha-moment-art.github.io/british-ear/
 ## 当前内容
 
 - 48 条 ARU Speech Corpus 真人英式录音
+- 支持按素材来源筛选，可单独练习某个视频
+- 25 条 `Keir Starmer · Farewell Answer` 视频逐句原声
+- 603 条 `Keir Starmer · Final PMQs` 视频逐句原声
+- 共 676 条听写素材，视频素材均由本地原视频转写并切分为独立 MP3
 - Speaker 03：英国 Berkshire 女声，每句独立 MP3
 - A1、A2、B1 难度筛选
 - 支持主题、句长和难度组合筛选
