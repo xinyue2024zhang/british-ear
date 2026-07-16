@@ -5,8 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>British Ear · 英式英语听写</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231b8a49'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-family='Arial' font-size='28' font-weight='700' fill='white'%3EBE%3C/text%3E%3C/svg%3E">
-  <link rel="stylesheet" href="styles.css?v=9">
-  <link rel="stylesheet" href="brand.css?v=9">
+  <link rel="stylesheet" href="styles.css?v=10">
+  <link rel="stylesheet" href="brand.css?v=10">
 </head>
 <body>
   <div class="app-shell">
@@ -42,6 +42,24 @@
             <span class="status-dot">本地模式</span>
           </div>
 
+          <div class="featured-control mode-control">
+            <span class="control-kicker">选择练习方式</span>
+            <div class="mode-picker" id="modePicker">
+              <button class="active" data-mode="dictation"><b>✍️ 听写</b><small>输入并检查答案</small></button>
+              <button data-mode="listening"><b>🎧 纯听</b><small>只听、看原文、翻句</small></button>
+            </div>
+          </div>
+
+          <div class="featured-control source-control">
+            <span class="control-kicker">选择课程素材</span>
+            <div class="source-picker" id="sourcePicker">
+              <button class="active" data-source="all"><b>全部素材</b><small>676 句</small></button>
+              <button data-source="ARU"><b>ARU 短句</b><small>48 句</small></button>
+              <button data-source="PMQs · Full"><b>Final PMQs</b><small>603 句</small></button>
+              <button data-source="PMQs · Farewell"><b>Farewell</b><small>25 句</small></button>
+            </div>
+          </div>
+
           <label>难度</label>
           <div class="segmented" id="levelFilter">
             <button data-value="all" class="active">全部</button>
@@ -56,14 +74,6 @@
             <option value="20">20 句</option>
             <option value="30">30 句</option>
             <option value="1000">全部可用句子</option>
-          </select>
-
-          <label for="sourceSelect">素材来源</label>
-          <select id="sourceSelect">
-            <option value="all">全部素材</option>
-            <option value="ARU">ARU 真人短句</option>
-            <option value="PMQs · Full">Keir Starmer · Final PMQs</option>
-            <option value="PMQs · Farewell">Keir Starmer · Farewell Answer</option>
           </select>
 
           <label for="topicSelect">句子主题</label>
@@ -128,13 +138,20 @@
           </div>
           <audio id="audioPlayer" preload="auto"></audio>
 
-          <label class="answer-label" for="answerInput">输入你听到的内容</label>
-          <textarea id="answerInput" rows="3" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Type what you hear…"></textarea>
+          <div id="answerSection">
+            <label class="answer-label" for="answerInput">输入你听到的内容</label>
+            <textarea id="answerInput" rows="3" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Type what you hear…"></textarea>
+          </div>
+
+          <div id="listeningPanel" class="listening-panel hidden">
+            <b>纯听模式</b>
+            <span>专注声音即可。需要时显示原文，然后进入下一句。</span>
+          </div>
 
           <div id="feedback" class="feedback hidden" aria-live="polite"></div>
 
           <div class="practice-actions">
-            <span class="shortcut">Enter 提交 · 输入框外 Space 播放 · F2 答案</span>
+            <span class="shortcut" id="shortcutText">Enter 提交 · 输入框外 Space 播放 · F2 答案</span>
             <div>
               <button class="ghost-button" id="revealButton">显示答案</button>
               <button class="primary-button" id="submitButton">检查答案</button>
@@ -157,6 +174,6 @@
   </div>
   <script src="sentences.js?v=7"></script>
   <script src="youtube-sentences.js?v=1"></script>
-  <script src="app.js?v=14"></script>
+  <script src="app.js?v=15"></script>
 </body>
 </html>

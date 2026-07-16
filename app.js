@@ -15,7 +15,7 @@ function loadStats(){
   };
  }catch{return defaultStats()}
 }
-const state = {level:"all",session:[],index:0,checked:false,attempted:false,revealed:false,repeatsLeft:0,repeatIndex:0,repeatTimer:null,stats:loadStats()};
+const state = {mode:"dictation",source:"all",level:"all",session:[],index:0,checked:false,attempted:false,revealed:false,repeatsLeft:0,repeatIndex:0,repeatTimer:null,stats:loadStats()};
 const audio = $("#audioPlayer");
 
 function classifyTopic(text){
@@ -40,8 +40,8 @@ function save(){localStorage.setItem(storeKey,JSON.stringify(state.stats));rende
 function current(){return state.session[state.index]}
 function makeSession(){
   let pool=window.SENTENCES.filter(x=>state.level==="all"||x.level===state.level);
-  const source=$("#sourceSelect").value,topic=$("#topicSelect").value,length=$("#lengthSelect").value;
-  if(source!=="all")pool=pool.filter(x=>x.source===source);
+  const topic=$("#topicSelect").value,length=$("#lengthSelect").value;
+  if(state.source!=="all")pool=pool.filter(x=>x.source===state.source);
   if(topic!=="all")pool=pool.filter(x=>x.topic===topic);
   if(length!=="all")pool=pool.filter(x=>x.length===length);
   if($("#mistakesOnly").checked) pool=pool.filter(x=>state.stats.mistakes.includes(x.id));
@@ -53,8 +53,12 @@ function renderQuestion(){
   clearTimeout(state.repeatTimer);audio.pause();state.repeatsLeft=0;audio.src=q.audio;audio.playbackRate=Number($("#speedSelect").value);
   $("#questionMeta").textContent=`${q.level} · ${q.topic} · ${q.length} · ${q.accent.toUpperCase()}`;$("#currentNumber").textContent=state.index+1;$("#sessionTotal").textContent=state.session.length;
   $("#progressBar").style.width=`${((state.index+1)/state.session.length)*100}%`;$("#answerInput").value="";$("#answerInput").disabled=false;
-  $("#feedback").className="feedback hidden";$("#submitButton").classList.remove("hidden");$("#submitButton").textContent="检查答案";$("#nextButton").classList.add("hidden");$("#revealButton").textContent="显示答案";state.checked=false;state.attempted=false;state.revealed=false;
-  setTimeout(()=>play(),250);$("#answerInput").focus();
+  $("#feedback").className="feedback hidden";$("#submitButton").textContent="检查答案";$("#revealButton").textContent=state.mode==="listening"?"显示原文":"显示答案";state.checked=false;state.attempted=false;state.revealed=false;
+  const listening=state.mode==="listening";
+  $("#answerSection").classList.toggle("hidden",listening);$("#listeningPanel").classList.toggle("hidden",!listening);$("#submitButton").classList.toggle("hidden",listening);$("#nextButton").classList.toggle("hidden",!listening);
+  $("#shortcutText").textContent=listening?"Enter 下一句 · Space 播放 · F2 原文":"Enter 提交 · 输入框外 Space 播放 · F2 答案";
+  $("#audioHint").textContent=listening?"放松听，需要时可显示原文":"输入框外按 Space 也可以播放";
+  setTimeout(()=>play(),250);if(!listening)$("#answerInput").focus();
 }
 function play(){
  clearTimeout(state.repeatTimer);const total=Number($("#repeatSelect").value);state.repeatsLeft=total;state.repeatIndex=1;playCurrent(total);
@@ -95,23 +99,23 @@ function toggleAnswer(){
   box.className="feedback";
   box.innerHTML=`<strong>正确答案</strong><div>${q.text}</div>`;
   state.revealed=true;
-  $("#revealButton").textContent="隐藏答案";
-  $("#answerInput").disabled=false;
-  $("#answerInput").focus();
+  $("#revealButton").textContent=state.mode==="listening"?"隐藏原文":"隐藏答案";
+  if(state.mode!=="listening"){$("#answerInput").disabled=false;$("#answerInput").focus()}
   return;
  }
  const hiding=!box.classList.contains("hidden");
  box.classList.toggle("hidden",hiding);
- $("#revealButton").textContent=hiding?"显示答案":"隐藏答案";
- if(!state.checked){$("#answerInput").disabled=false;$("#answerInput").focus()}
+ $("#revealButton").textContent=hiding?(state.mode==="listening"?"显示原文":"显示答案"):(state.mode==="listening"?"隐藏原文":"隐藏答案");
+ if(state.mode!=="listening"&&!state.checked){$("#answerInput").disabled=false;$("#answerInput").focus()}
 }
 function next(){if(state.index<state.session.length-1){state.index++;renderQuestion()}else{const day=new Date().toISOString().slice(0,10);if(state.stats.lastDay!==day){state.stats.streak++;state.stats.lastDay=day;save()}alert("本组练习完成！");makeSession()}}
 function renderStats(){const s=state.stats;$("#completedTotal").textContent=s.completed;$("#accuracyTotal").textContent=s.attempts?`${Math.round(s.correct/s.attempts*100)}%`:"—";$("#mistakeTotal").textContent=s.mistakes.length;$("#streakCount").textContent=s.streak}
 
 $("#playButton").onclick=play;$("#replayButton").onclick=play;$("#submitButton").onclick=()=>check(false);$("#revealButton").onclick=toggleAnswer;$("#nextButton").onclick=next;$("#newSessionButton").onclick=makeSession;
 $("#speedSelect").onchange=()=>audio.playbackRate=Number($("#speedSelect").value);
+$("#modePicker").onclick=e=>{const button=e.target.closest("button[data-mode]");if(!button)return;state.mode=button.dataset.mode;document.querySelectorAll("#modePicker button").forEach(b=>b.classList.toggle("active",b===button));renderQuestion()};
+$("#sourcePicker").onclick=e=>{const button=e.target.closest("button[data-source]");if(!button)return;state.source=button.dataset.source;document.querySelectorAll("#sourcePicker button").forEach(b=>b.classList.toggle("active",b===button));makeSession()};
 $("#levelFilter").onclick=e=>{if(!e.target.dataset.value)return;document.querySelectorAll("#levelFilter button").forEach(b=>b.classList.remove("active"));e.target.classList.add("active");state.level=e.target.dataset.value;makeSession()};
-$("#sourceSelect").onchange=makeSession;
 $("#topicSelect").onchange=makeSession;
 $("#lengthSelect").onchange=makeSession;
 $("#sessionSize").onchange=makeSession;
@@ -121,6 +125,6 @@ $("#resetButton").onclick=()=>{if(confirm("确定清空所有练习记录吗？"
 document.addEventListener("keydown",e=>{
  if(e.key==="F2"||(e.key==="/"&&(e.metaKey||e.ctrlKey))){e.preventDefault();toggleAnswer();return}
  if(e.code==="Space"&&document.activeElement!==$("#answerInput")){e.preventDefault();play()}
- if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();state.checked?next():check(false)}
+ if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();state.mode==="listening"?next():(state.checked?next():check(false))}
 });
 renderStats();makeSession();
