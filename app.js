@@ -97,7 +97,7 @@ function toggleAnswer(){
  if(!state.revealed){
   const q=current();
   box.className="feedback";
-  box.innerHTML=`<strong>正确答案</strong><div>${q.text}</div>`;
+  box.innerHTML=`<strong>${state.mode==="listening"?"原文":"正确答案"}</strong><div>${q.text}</div>`;
   state.revealed=true;
   $("#revealButton").textContent=state.mode==="listening"?"隐藏原文":"隐藏答案";
   if(state.mode!=="listening"){$("#answerInput").disabled=false;$("#answerInput").focus()}
@@ -113,8 +113,8 @@ function renderStats(){const s=state.stats;$("#completedTotal").textContent=s.co
 
 $("#playButton").onclick=play;$("#replayButton").onclick=play;$("#submitButton").onclick=()=>check(false);$("#revealButton").onclick=toggleAnswer;$("#nextButton").onclick=next;$("#newSessionButton").onclick=makeSession;
 $("#speedSelect").onchange=()=>audio.playbackRate=Number($("#speedSelect").value);
-$("#modePicker").onclick=e=>{const button=e.target.closest("button[data-mode]");if(!button)return;state.mode=button.dataset.mode;document.querySelectorAll("#modePicker button").forEach(b=>b.classList.toggle("active",b===button));renderQuestion()};
-$("#sourcePicker").onclick=e=>{const button=e.target.closest("button[data-source]");if(!button)return;state.source=button.dataset.source;document.querySelectorAll("#sourcePicker button").forEach(b=>b.classList.toggle("active",b===button));makeSession()};
+$("#modePicker").onclick=e=>{const button=e.target.closest("button[data-mode]");if(!button)return;state.mode=button.dataset.mode;document.querySelectorAll("#modePicker button").forEach(b=>{const active=b===button;b.classList.toggle("active",active);b.setAttribute("aria-pressed",active)});renderQuestion()};
+$("#sourcePicker").onclick=e=>{const button=e.target.closest("button[data-source]");if(!button)return;state.source=button.dataset.source;document.querySelectorAll("#sourcePicker button").forEach(b=>{const active=b===button;b.classList.toggle("active",active);b.setAttribute("aria-pressed",active)});makeSession()};
 $("#levelFilter").onclick=e=>{if(!e.target.dataset.value)return;document.querySelectorAll("#levelFilter button").forEach(b=>b.classList.remove("active"));e.target.classList.add("active");state.level=e.target.dataset.value;makeSession()};
 $("#topicSelect").onchange=makeSession;
 $("#lengthSelect").onchange=makeSession;

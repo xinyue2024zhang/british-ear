@@ -6,7 +6,7 @@
   <title>British Ear · 英式英语听写</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231b8a49'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-family='Arial' font-size='28' font-weight='700' fill='white'%3EBE%3C/text%3E%3C/svg%3E">
   <link rel="stylesheet" href="styles.css?v=10">
-  <link rel="stylesheet" href="brand.css?v=10">
+  <link rel="stylesheet" href="brand.css?v=11">
 </head>
 <body>
   <div class="app-shell">
@@ -45,18 +45,18 @@
           <div class="featured-control mode-control">
             <span class="control-kicker">选择练习方式</span>
             <div class="mode-picker" id="modePicker">
-              <button class="active" data-mode="dictation"><b>✍️ 听写</b><small>输入并检查答案</small></button>
-              <button data-mode="listening"><b>🎧 纯听</b><small>只听、看原文、翻句</small></button>
+              <button class="active" data-mode="dictation" aria-pressed="true"><b><svg class="mode-icon ipad-pencil-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="2.5" width="13" height="19" rx="2.3"/><path d="M8.7 18.5h2.6M18.4 5.1l2.1 2.1M10.2 15.4l1.1-3.3 7.6-7.6a1.5 1.5 0 0 1 2.1 2.1l-7.6 7.6-3.2 1.2Z"/></svg>听写</b><small>输入并检查答案</small></button>
+              <button data-mode="listening" aria-pressed="false"><b>🎧 纯听</b><small>只听、看原文、翻句</small></button>
             </div>
           </div>
 
           <div class="featured-control source-control">
             <span class="control-kicker">选择课程素材</span>
             <div class="source-picker" id="sourcePicker">
-              <button class="active" data-source="all"><b>全部素材</b><small>676 句</small></button>
-              <button data-source="ARU"><b>ARU 短句</b><small>48 句</small></button>
-              <button data-source="PMQs · Full"><b>Final PMQs</b><small>603 句</small></button>
-              <button data-source="PMQs · Farewell"><b>Farewell</b><small>25 句</small></button>
+              <button class="active" data-source="all" aria-pressed="true"><b>全部素材</b><small>676 句</small></button>
+              <button data-source="ARU" aria-pressed="false"><b>ARU 短句</b><small>48 句</small></button>
+              <button data-source="PMQs · Full" aria-pressed="false"><b>Final PMQs</b><small>603 句</small></button>
+              <button data-source="PMQs · Farewell" aria-pressed="false"><b>Farewell</b><small>25 句</small></button>
             </div>
           </div>
 
@@ -174,6 +174,6 @@
   </div>
   <script src="sentences.js?v=7"></script>
   <script src="youtube-sentences.js?v=1"></script>
-  <script src="app.js?v=15"></script>
+  <script src="app.js?v=16"></script>
 </body>
 </html>
