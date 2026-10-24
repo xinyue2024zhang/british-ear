@@ -32,7 +32,18 @@ textarea:focus{border-color:#118dff;box-shadow:0 0 0 3px rgba(17,141,255,.13)}
 .mode-icon{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}
 .ipad-pencil-icon{width:19px;height:19px;stroke-width:1.65}
 .headphones-icon{width:19px;height:19px;stroke-width:1.7}
-.mode-picker small,.source-picker small{margin-top:4px;font-size:10px;opacity:.72;line-height:1.3}.mode-picker small{white-space:nowrap}
+.mode-picker small,.source-picker small{margin-top:4px;font-size:10px;opacity:.72;line-height:1.3}.mode-picker small{white-space:normal}
+.mode-picker b{flex-wrap:wrap}
+.source-picker b{white-space:normal;overflow:visible;text-overflow:clip}
+.section-heading{gap:10px;flex-wrap:wrap}
+.progress-row{gap:18px;flex-wrap:wrap}
+.progress-row>div:first-child{flex:1;min-width:0}
+.progress-track{flex-shrink:0}
+.practice-actions{gap:14px;flex-wrap:wrap}
+.practice-actions>div{flex-wrap:wrap}
+.shortcut{line-height:1.6}
+.audio-zone>div{min-width:0}
+.play-button{flex-shrink:0}
 .listening-panel{min-height:116px;border:1px dashed rgba(17,141,255,.45);border-radius:14px;padding:24px;display:flex;flex-direction:column;justify-content:center;background:linear-gradient(135deg,rgba(17,141,255,.07),rgba(26,171,64,.07))}
 .listening-panel b{font:22px Georgia,serif}.listening-panel span{margin-top:8px;color:var(--muted);font-size:13px}
 

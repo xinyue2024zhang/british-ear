@@ -1,23 +1,23 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en-GB">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>British Ear · 英式英语听写</title>
+  <title>British Ear · British English dictation</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%231b8a49'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-family='Arial' font-size='28' font-weight='700' fill='white'%3EBE%3C/text%3E%3C/svg%3E">
   <link rel="stylesheet" href="styles.css?v=10">
-  <link rel="stylesheet" href="brand.css?v=12">
+  <link rel="stylesheet" href="brand.css?v=13">
 </head>
 <body>
   <div class="app-shell">
     <header class="topbar">
-      <a class="brand" href="#" aria-label="返回首页">
+      <a class="brand" href="#" aria-label="Back to home">
         <span class="brand-mark">BE</span>
-        <span><strong>British Ear</strong><small>英式英语听写</small></span>
+        <span><strong>British Ear</strong><small>British English dictation</small></span>
       </a>
       <div class="header-actions">
-        <button class="icon-button" id="themeButton" aria-label="切换深色模式">☾</button>
-        <button class="ghost-button" id="resetButton">重置进度</button>
+        <button class="icon-button" id="themeButton" aria-label="Toggle dark mode">☾</button>
+        <button class="ghost-button" id="resetButton">Reset progress</button>
       </div>
     </header>
 
@@ -25,97 +25,97 @@
       <section class="hero">
         <div>
           <span class="eyebrow">SOUTHERN BRITISH · RP</span>
-          <h1>听清每一个英式音节</h1>
-          <p>短句精听、即时纠错、本地保存。戴上耳机，从今天的 10 句开始。</p>
+          <h1>Catch every British syllable</h1>
+          <p>Listen closely to short sentences, get instant feedback and save your progress on this device. Put on your headphones and start with 10 sentences today.</p>
         </div>
         <div class="streak-card">
-          <span>连续练习</span>
-          <strong><b id="streakCount">0</b> 天</strong>
-          <small>完成一组即可点亮今天</small>
+          <span>Practice streak</span>
+          <strong><b id="streakCount">0</b> days</strong>
+          <small>Complete a session to count today</small>
         </div>
       </section>
 
       <section class="dashboard">
         <aside class="sidebar card">
           <div class="section-heading">
-            <div><span class="kicker">训练设置</span><h2>今日练习</h2></div>
-            <span class="status-dot">本地模式</span>
+            <div><span class="kicker">PRACTICE SETTINGS</span><h2>Today’s practice</h2></div>
+            <span class="status-dot">On-device</span>
           </div>
 
           <div class="featured-control mode-control">
-            <span class="control-kicker">选择练习方式</span>
+            <span class="control-kicker">Choose a practice mode</span>
             <div class="mode-picker" id="modePicker">
-              <button class="active" data-mode="dictation" aria-pressed="true"><b><svg class="mode-icon ipad-pencil-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="2.5" width="13" height="19" rx="2.3"/><path d="M8.7 18.5h2.6M18.4 5.1l2.1 2.1M10.2 15.4l1.1-3.3 7.6-7.6a1.5 1.5 0 0 1 2.1 2.1l-7.6 7.6-3.2 1.2Z"/></svg>听写</b><small>输入并检查答案</small></button>
-              <button data-mode="listening" aria-pressed="false"><b><svg class="mode-icon headphones-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13v-1a8 8 0 0 1 16 0v1"/><path d="M4 13a2 2 0 0 1 2-2h1v8H6a2 2 0 0 1-2-2v-4ZM20 13a2 2 0 0 0-2-2h-1v8h1a2 2 0 0 0 2-2v-4Z"/></svg>纯听</b><small>听原声，看原文</small></button>
+              <button class="active" data-mode="dictation" aria-pressed="true"><b><svg class="mode-icon ipad-pencil-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="2.5" width="13" height="19" rx="2.3"/><path d="M8.7 18.5h2.6M18.4 5.1l2.1 2.1M10.2 15.4l1.1-3.3 7.6-7.6a1.5 1.5 0 0 1 2.1 2.1l-7.6 7.6-3.2 1.2Z"/></svg>Dictation</b><small>Type and check</small></button>
+              <button data-mode="listening" aria-pressed="false"><b><svg class="mode-icon headphones-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 13v-1a8 8 0 0 1 16 0v1"/><path d="M4 13a2 2 0 0 1 2-2h1v8H6a2 2 0 0 1-2-2v-4ZM20 13a2 2 0 0 0-2-2h-1v8h1a2 2 0 0 0 2-2v-4Z"/></svg>Listening</b><small>Listen and read</small></button>
             </div>
           </div>
 
           <div class="featured-control source-control">
-            <span class="control-kicker">选择课程素材</span>
+            <span class="control-kicker">Choose your material</span>
             <div class="source-picker" id="sourcePicker">
-              <button class="active" data-source="all" aria-pressed="true"><b>全部素材</b><small>676 句</small></button>
-              <button data-source="ARU" aria-pressed="false"><b>ARU 短句</b><small>48 句</small></button>
-              <button data-source="PMQs · Full" aria-pressed="false"><b>Final PMQs</b><small>603 句</small></button>
-              <button data-source="PMQs · Farewell" aria-pressed="false"><b>Farewell</b><small>25 句</small></button>
+              <button class="active" data-source="all" aria-pressed="true"><b>All materials</b><small>676 sentences</small></button>
+              <button data-source="ARU" aria-pressed="false"><b>ARU sentences</b><small>48 sentences</small></button>
+              <button data-source="PMQs · Full" aria-pressed="false"><b>Final PMQs</b><small>603 sentences</small></button>
+              <button data-source="PMQs · Farewell" aria-pressed="false"><b>Farewell</b><small>25 sentences</small></button>
             </div>
           </div>
 
-          <label>难度</label>
+          <label>Level</label>
           <div class="segmented" id="levelFilter">
-            <button data-value="all" class="active">全部</button>
+            <button data-value="all" class="active">All</button>
             <button data-value="A1">A1</button>
             <button data-value="A2">A2</button>
             <button data-value="B1">B1</button>
           </div>
 
-          <label for="sessionSize">每组句数</label>
+          <label for="sessionSize">Sentences per session</label>
           <select id="sessionSize">
-            <option value="10">10 句</option>
-            <option value="20">20 句</option>
-            <option value="30">30 句</option>
-            <option value="1000">全部可用句子</option>
+            <option value="10">10 sentences</option>
+            <option value="20">20 sentences</option>
+            <option value="30">30 sentences</option>
+            <option value="1000">All available sentences</option>
           </select>
 
-          <label for="topicSelect">句子主题</label>
+          <label for="topicSelect">Topic</label>
           <select id="topicSelect">
-            <option value="all">全部主题</option>
-            <option value="日常生活">日常生活</option>
-            <option value="人与关系">人与关系</option>
-            <option value="自然与天气">自然与天气</option>
-            <option value="食物与饮品">食物与饮品</option>
-            <option value="物品与动作">物品与动作</option>
+            <option value="all">All topics</option>
+            <option value="Everyday life">Everyday life</option>
+            <option value="People &amp; relationships">People &amp; relationships</option>
+            <option value="Nature &amp; weather">Nature &amp; weather</option>
+            <option value="Food &amp; drink">Food &amp; drink</option>
+            <option value="Objects &amp; actions">Objects &amp; actions</option>
           </select>
 
-          <label for="lengthSelect">句子长度</label>
+          <label for="lengthSelect">Sentence length</label>
           <select id="lengthSelect">
-            <option value="all">全部长度</option>
-            <option value="短句">短句（不超过 6 词）</option>
-            <option value="中句">中句（7–9 词）</option>
-            <option value="长句">长句（10 词以上）</option>
+            <option value="all">All lengths</option>
+            <option value="Short">Short (up to 6 words)</option>
+            <option value="Medium">Medium (7–9 words)</option>
+            <option value="Long">Long (10+ words)</option>
           </select>
 
-          <label for="speedSelect">播放速度</label>
+          <label for="speedSelect">Playback speed</label>
           <select id="speedSelect">
-            <option value="0.75">0.75× 慢速</option>
-            <option value="1" selected>1.00× 正常</option>
-            <option value="1.25">1.25× 快速</option>
+            <option value="0.75">0.75× Slow</option>
+            <option value="1" selected>1.00× Normal</option>
+            <option value="1.25">1.25× Fast</option>
           </select>
 
-          <label for="repeatSelect">每次自动播放</label>
+          <label for="repeatSelect">Automatic repeats</label>
           <select id="repeatSelect">
-            <option value="1">1 次</option>
-            <option value="2" selected>2 次</option>
-            <option value="3">3 次</option>
-            <option value="5">5 次</option>
+            <option value="1">Once</option>
+            <option value="2" selected>Twice</option>
+            <option value="3">3 times</option>
+            <option value="5">5 times</option>
           </select>
 
-          <label class="check-row"><input id="mistakesOnly" type="checkbox"><span>只练错题</span></label>
-          <button class="primary-button" id="newSessionButton">开始新一组</button>
+          <label class="check-row"><input id="mistakesOnly" type="checkbox"><span>Practise mistakes only</span></label>
+          <button class="primary-button" id="newSessionButton">Start a new session</button>
 
           <div class="mini-stats">
-            <div><strong id="completedTotal">0</strong><span>累计完成</span></div>
-            <div><strong id="accuracyTotal">—</strong><span>总体正确率</span></div>
-            <div><strong id="mistakeTotal">0</strong><span>错题</span></div>
+            <div><strong id="completedTotal">0</strong><span>Completed</span></div>
+            <div><strong id="accuracyTotal">—</strong><span>Accuracy</span></div>
+            <div><strong id="mistakeTotal">0</strong><span>Mistakes</span></div>
           </div>
         </aside>
 
@@ -123,39 +123,39 @@
           <div class="progress-row">
             <div>
               <span class="kicker" id="questionMeta">A1 · SOUTHERN BRITISH</span>
-              <h2>第 <span id="currentNumber">1</span> 句 <small>/ <span id="sessionTotal">10</span></small></h2>
+              <h2>Sentence <span id="currentNumber">1</span> <small>/ <span id="sessionTotal">10</span></small></h2>
             </div>
             <div class="progress-track"><span id="progressBar"></span></div>
           </div>
 
           <div class="audio-zone">
-            <button class="play-button" id="playButton" aria-label="播放音频"><span id="playIcon">▶</span></button>
+            <button class="play-button" id="playButton" aria-label="Play audio"><span id="playIcon">▶</span></button>
             <div>
-              <strong id="audioTitle">播放这句话</strong>
-              <span id="audioHint">输入框外按 Space 也可以播放</span>
+              <strong id="audioTitle">Play this sentence</strong>
+              <span id="audioHint">Press Space outside the text box to play</span>
             </div>
-            <button class="small-button" id="replayButton">↻ 重播</button>
+            <button class="small-button" id="replayButton">↻ Replay</button>
           </div>
           <audio id="audioPlayer" preload="auto"></audio>
 
           <div id="answerSection">
-            <label class="answer-label" for="answerInput">输入你听到的内容</label>
+            <label class="answer-label" for="answerInput">Type what you hear</label>
             <textarea id="answerInput" rows="3" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Type what you hear…"></textarea>
           </div>
 
           <div id="listeningPanel" class="listening-panel hidden">
-            <b>纯听模式</b>
-            <span>专注声音即可。需要时显示原文，然后进入下一句。</span>
+            <b>Listening mode</b>
+            <span>Focus on the audio. Show the transcript when you need it, then move to the next sentence.</span>
           </div>
 
           <div id="feedback" class="feedback hidden" aria-live="polite"></div>
 
           <div class="practice-actions">
-            <span class="shortcut" id="shortcutText">Enter 提交 · 输入框外 Space 播放 · F2 答案</span>
+            <span class="shortcut" id="shortcutText">Enter: check · Space outside the text box: play · F2: answer</span>
             <div>
-              <button class="ghost-button" id="revealButton">显示答案</button>
-              <button class="primary-button" id="submitButton">检查答案</button>
-              <button class="primary-button hidden" id="nextButton">下一句 →</button>
+              <button class="ghost-button" id="revealButton">Show answer</button>
+              <button class="primary-button" id="submitButton">Check answer</button>
+              <button class="primary-button hidden" id="nextButton">Next sentence →</button>
             </div>
           </div>
         </section>
@@ -163,17 +163,17 @@
 
       <section class="how-it-works">
         <span class="kicker">HOW IT WORKS</span>
-        <h2>一次只专注一句</h2>
+        <h2>One sentence at a time</h2>
         <div class="steps">
-          <article><b>01</b><h3>先听</h3><p>完整听一遍，先抓句子节奏和关键词。</p></article>
-          <article><b>02</b><h3>写下</h3><p>输入听到的内容，不必担心大小写和标点。</p></article>
-          <article><b>03</b><h3>订正</h3><p>系统逐词标出遗漏和错误，并自动加入错题。</p></article>
+          <article><b>01</b><h3>Listen</h3><p>Listen once from start to finish, focusing on the rhythm and key words.</p></article>
+          <article><b>02</b><h3>Write</h3><p>Type what you hear. Don’t worry about capital letters or punctuation.</p></article>
+          <article><b>03</b><h3>Review</h3><p>Missing and incorrect words are highlighted, and the sentence is automatically added to your mistakes.</p></article>
         </div>
       </section>
     </main>
   </div>
   <script src="sentences.js?v=7"></script>
   <script src="youtube-sentences.js?v=1"></script>
-  <script src="app.js?v=16"></script>
+  <script src="app.js?v=17"></script>
 </body>
 </html>

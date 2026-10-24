@@ -21,17 +21,17 @@ const audio = $("#audioPlayer");
 function classifyTopic(text){
  const s=text.toLowerCase();
  const groups={
-  "食物与饮品":["food","tea","egg","beef","lamb","rice","juice","lemon","dish","farm","corn","fish"],
-  "自然与天气":["wind","cloud","sea","rain","snow","sun","river","spring","leaf","leaves","birch","fire"],
-  "人与关系":["girl","boy","woman","man","friend","people","rider","navy","she ","he ","her ","his "],
-  "日常生活":["clothes","money","game","news","note","carpet","screen","ring","wash","wear","morning","evening"],
-  "物品与动作":["stick","chart","lock","coin","force","move","write","paste","soap","hoist","weave","struck"]
+  "Food & drink":["food","tea","egg","beef","lamb","rice","juice","lemon","dish","farm","corn","fish"],
+  "Nature & weather":["wind","cloud","sea","rain","snow","sun","river","spring","leaf","leaves","birch","fire"],
+  "People & relationships":["girl","boy","woman","man","friend","people","rider","navy","she ","he ","her ","his "],
+  "Everyday life":["clothes","money","game","news","note","carpet","screen","ring","wash","wear","morning","evening"],
+  "Objects & actions":["stick","chart","lock","coin","force","move","write","paste","soap","hoist","weave","struck"]
  };
  const tokens=new Set(s.match(/[a-z']+/g)||[]);
  for(const [topic,words] of Object.entries(groups))if(words.some(word=>tokens.has(word.trim())))return topic;
- return "日常生活";
+ return "Everyday life";
 }
-function classifyLength(text){const n=normalise(text).split(" ").filter(Boolean).length;return n<=6?"短句":n<=9?"中句":"长句"}
+function classifyLength(text){const n=normalise(text).split(" ").filter(Boolean).length;return n<=6?"Short":n<=9?"Medium":"Long"}
 window.SENTENCES=window.SENTENCES.map(q=>({...q,topic:q.topic||classifyTopic(q.text),length:q.length||classifyLength(q.text)}));
 
 function normalise(text){return text.toLowerCase().replace(/[’‘]/g,"'").replace(/[^a-z0-9']+/g," ").trim().replace(/\s+/g," ")}
@@ -45,7 +45,7 @@ function makeSession(){
   if(topic!=="all")pool=pool.filter(x=>x.topic===topic);
   if(length!=="all")pool=pool.filter(x=>x.length===length);
   if($("#mistakesOnly").checked) pool=pool.filter(x=>state.stats.mistakes.includes(x.id));
-  if(!pool.length){alert("当前筛选条件下还没有题目。");return}
+  if(!pool.length){alert("No sentences match your current filters.");return}
   state.session=shuffle(pool).slice(0,Math.min(Number($("#sessionSize").value),pool.length));state.index=0;state.checked=false;renderQuestion();
 }
 function renderQuestion(){
@@ -53,11 +53,11 @@ function renderQuestion(){
   clearTimeout(state.repeatTimer);audio.pause();state.repeatsLeft=0;audio.src=q.audio;audio.playbackRate=Number($("#speedSelect").value);
   $("#questionMeta").textContent=`${q.level} · ${q.topic} · ${q.length} · ${q.accent.toUpperCase()}`;$("#currentNumber").textContent=state.index+1;$("#sessionTotal").textContent=state.session.length;
   $("#progressBar").style.width=`${((state.index+1)/state.session.length)*100}%`;$("#answerInput").value="";$("#answerInput").disabled=false;
-  $("#feedback").className="feedback hidden";$("#submitButton").textContent="检查答案";$("#revealButton").textContent=state.mode==="listening"?"显示原文":"显示答案";state.checked=false;state.attempted=false;state.revealed=false;
+  $("#feedback").className="feedback hidden";$("#submitButton").textContent="Check answer";$("#revealButton").textContent=state.mode==="listening"?"Show transcript":"Show answer";state.checked=false;state.attempted=false;state.revealed=false;
   const listening=state.mode==="listening";
   $("#answerSection").classList.toggle("hidden",listening);$("#listeningPanel").classList.toggle("hidden",!listening);$("#submitButton").classList.toggle("hidden",listening);$("#nextButton").classList.toggle("hidden",!listening);
-  $("#shortcutText").textContent=listening?"Enter 下一句 · Space 播放 · F2 原文":"Enter 提交 · 输入框外 Space 播放 · F2 答案";
-  $("#audioHint").textContent=listening?"放松听，需要时可显示原文":"输入框外按 Space 也可以播放";
+  $("#shortcutText").textContent=listening?"Enter: next · Space: play · F2: transcript":"Enter: check · Space outside the text box: play · F2: answer";
+  $("#audioHint").textContent=listening?"Listen at your own pace. Show the transcript when you need it.":"Press Space outside the text box to play";
   setTimeout(()=>play(),250);if(!listening)$("#answerInput").focus();
 }
 function play(){
@@ -65,11 +65,11 @@ function play(){
 }
 function playCurrent(total){
  audio.playbackRate=Number($("#speedSelect").value);audio.currentTime=0;
- $("#playIcon").textContent="❚❚";$("#audioTitle").textContent=total>1?`正在播放 ${state.repeatIndex}/${total}`:"正在播放";
+ $("#playIcon").textContent="❚❚";$("#audioTitle").textContent=total>1?`Playing ${state.repeatIndex}/${total}`:"Playing";
  const started=audio.play();
- if(started)started.catch(()=>{clearTimeout(state.repeatTimer);state.repeatsLeft=0;$("#playIcon").textContent="▶";$("#audioTitle").textContent="点击播放音频"});
+ if(started)started.catch(()=>{clearTimeout(state.repeatTimer);state.repeatsLeft=0;$("#playIcon").textContent="▶";$("#audioTitle").textContent="Click to play audio"});
 }
-audio.addEventListener("ended",()=>{const total=Number($("#repeatSelect").value);state.repeatsLeft--;if(state.repeatsLeft>0){state.repeatIndex++;$("#audioTitle").textContent=`稍后重播 ${state.repeatIndex}/${total}`;state.repeatTimer=setTimeout(()=>playCurrent(total),650)}else{$("#playIcon").textContent="▶";$("#audioTitle").textContent="再听一遍"}});
+audio.addEventListener("ended",()=>{const total=Number($("#repeatSelect").value);state.repeatsLeft--;if(state.repeatsLeft>0){state.repeatIndex++;$("#audioTitle").textContent=`Replaying shortly ${state.repeatIndex}/${total}`;state.repeatTimer=setTimeout(()=>playCurrent(total),650)}else{$("#playIcon").textContent="▶";$("#audioTitle").textContent="Listen again"}});
 function escapeHtml(text){return text.replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[char])}
 function diff(answer,target){
  const a=normalise(answer).split(" ").filter(Boolean),t=normalise(target).split(" ").filter(Boolean);
@@ -86,10 +86,10 @@ function diff(answer,target){
 function check(reveal=false){
  if(state.checked)return;const q=current(),answer=$("#answerInput").value.trim();if(!answer&&!reveal){$("#answerInput").focus();return}
  const ok=!reveal&&normalise(answer)===normalise(q.text);state.checked=ok;$("#answerInput").disabled=ok;
- const box=$("#feedback");box.className=`feedback ${ok?"":"bad"}`;box.innerHTML=ok?`<strong>完全正确，很好！</strong>${q.text}`:`<strong>${reveal?"正确答案":"再留意标出的词"}</strong><div>${diff(answer,q.text)}</div><div style="margin-top:8px;color:var(--muted)">${q.text}</div>`;
- state.revealed=true;$("#revealButton").textContent="隐藏答案";
+ const box=$("#feedback");box.className=`feedback ${ok?"":"bad"}`;box.innerHTML=ok?`<strong>All correct. Well done!</strong>${q.text}`:`<strong>${reveal?"Correct answer":"Check the highlighted words"}</strong><div>${diff(answer,q.text)}</div><div style="margin-top:8px;color:var(--muted)">${q.text}</div>`;
+ state.revealed=true;$("#revealButton").textContent="Hide answer";
  if(!reveal&&!state.attempted){state.stats.attempts++;state.stats.completed++;state.attempted=true;if(ok){state.stats.correct++;state.stats.mistakes=state.stats.mistakes.filter(id=>id!==q.id)}else if(!state.stats.mistakes.includes(q.id))state.stats.mistakes.push(q.id);save()}
- if(ok){$("#submitButton").classList.add("hidden")}else{$("#submitButton").classList.remove("hidden");$("#submitButton").textContent="再次检查";$("#answerInput").disabled=false;$("#answerInput").focus()}
+ if(ok){$("#submitButton").classList.add("hidden")}else{$("#submitButton").classList.remove("hidden");$("#submitButton").textContent="Check again";$("#answerInput").disabled=false;$("#answerInput").focus()}
  $("#nextButton").classList.remove("hidden");
 }
 function toggleAnswer(){
@@ -97,18 +97,18 @@ function toggleAnswer(){
  if(!state.revealed){
   const q=current();
   box.className="feedback";
-  box.innerHTML=`<strong>${state.mode==="listening"?"原文":"正确答案"}</strong><div>${q.text}</div>`;
+  box.innerHTML=`<strong>${state.mode==="listening"?"Transcript":"Correct answer"}</strong><div>${q.text}</div>`;
   state.revealed=true;
-  $("#revealButton").textContent=state.mode==="listening"?"隐藏原文":"隐藏答案";
+  $("#revealButton").textContent=state.mode==="listening"?"Hide transcript":"Hide answer";
   if(state.mode!=="listening"){$("#answerInput").disabled=false;$("#answerInput").focus()}
   return;
  }
  const hiding=!box.classList.contains("hidden");
  box.classList.toggle("hidden",hiding);
- $("#revealButton").textContent=hiding?(state.mode==="listening"?"显示原文":"显示答案"):(state.mode==="listening"?"隐藏原文":"隐藏答案");
+ $("#revealButton").textContent=hiding?(state.mode==="listening"?"Show transcript":"Show answer"):(state.mode==="listening"?"Hide transcript":"Hide answer");
  if(state.mode!=="listening"&&!state.checked){$("#answerInput").disabled=false;$("#answerInput").focus()}
 }
-function next(){if(state.index<state.session.length-1){state.index++;renderQuestion()}else{const day=new Date().toISOString().slice(0,10);if(state.stats.lastDay!==day){state.stats.streak++;state.stats.lastDay=day;save()}alert("本组练习完成！");makeSession()}}
+function next(){if(state.index<state.session.length-1){state.index++;renderQuestion()}else{const day=new Date().toISOString().slice(0,10);if(state.stats.lastDay!==day){state.stats.streak++;state.stats.lastDay=day;save()}alert("Session complete!");makeSession()}}
 function renderStats(){const s=state.stats;$("#completedTotal").textContent=s.completed;$("#accuracyTotal").textContent=s.attempts?`${Math.round(s.correct/s.attempts*100)}%`:"—";$("#mistakeTotal").textContent=s.mistakes.length;$("#streakCount").textContent=s.streak}
 
 $("#playButton").onclick=play;$("#replayButton").onclick=play;$("#submitButton").onclick=()=>check(false);$("#revealButton").onclick=toggleAnswer;$("#nextButton").onclick=next;$("#newSessionButton").onclick=makeSession;
@@ -121,7 +121,7 @@ $("#lengthSelect").onchange=makeSession;
 $("#sessionSize").onchange=makeSession;
 $("#mistakesOnly").onchange=makeSession;
 $("#themeButton").onclick=()=>document.body.classList.toggle("dark");
-$("#resetButton").onclick=()=>{if(confirm("确定清空所有练习记录吗？")){localStorage.removeItem(storeKey);state.stats=defaultStats();save();makeSession()}};
+$("#resetButton").onclick=()=>{if(confirm("Clear all your practice records?")){localStorage.removeItem(storeKey);state.stats=defaultStats();save();makeSession()}};
 document.addEventListener("keydown",e=>{
  if(e.key==="F2"||(e.key==="/"&&(e.metaKey||e.ctrlKey))){e.preventDefault();toggleAnswer();return}
  if(e.code==="Space"&&document.activeElement!==$("#answerInput")){e.preventDefault();play()}
